@@ -4,17 +4,19 @@ import requests
 import os
 from datetime import datetime
 import time
+from deepface import DeepFace
 
 # Global Image Data handler class
 class ImageData:
     def __init__(self, image_path):
         self.image_path = image_path
-        self.time_taken = self.__ImageDetails__()[1]
+        self.time_taken = self.get_time_taken()
         self.location = self.get_city_name()
+        self.emotion = self.get_emotion()
 
     def __strAll__(self):
         # Implement the logic to return all metadata of the image in a string format
-        print (f'File Path: {self.image_path}, Creation Time: {self.time_taken}, Location: {self.location}')
+        print (f'File Path: {self.image_path}, Creation Time: {self.time_taken}, Location: {self.location}, Emotion: {self.emotion}')
 
     def __ImageDetails__(self):
         # Implement the logic to get specific metadata from the image
@@ -24,6 +26,13 @@ class ImageData:
         GPSInfo = exif.get('GPSInfo')
         timeInfo = exif.get('DateTime')
         return GPSInfo, timeInfo
+
+    def get_time_taken(self):
+        raw_time_info = self.__ImageDetails__()[1]
+        if raw_time_info != None:
+            raw_time_info = datetime.strptime(raw_time_info, "%Y:%m:%d %H:%M:%S").date()
+
+        return raw_time_info
 
     def __dms_to_decimal__(self):
         # Take in raw GPS info and convert to decimal 
@@ -71,10 +80,32 @@ class ImageData:
                 return None
         else:
             # Return None or a default value if latitude or longitude is None
-            print("Invalid latitude or longitude.")
             return None
+        
+    def get_emotion(self):
+        # Get emotion of people in picture otherwise return None
+        try:
+            objs = DeepFace.analyze(img_path = self.image_path, actions = ['emotion'])
+            objs = objs[0].get('dominant_emotion')
+        except ValueError:
+            objs = None
+        
+        return objs
+
 
 if __name__ == '__main__': 
-    image_path = r"C:\Users\16134\iCloudPhotos\Photos\IMG_0252.JPG"
-    image = ImageData(image_path)
-    image.__strAll__()
+    DIR = r"C:\Users\16134\iCloudPhotos\Photos"
+    start_time = time.time()
+    
+    for index, image in enumerate(os.listdir(DIR)):
+        file_type = image[-3:].lower()
+        img_path = os.path.join(DIR, image)
+
+        if file_type == 'jpg':
+            current_image = ImageData(img_path)
+            current_image.__strAll__()
+
+    print(index)
+    end_time = time.time()
+    execution_time = (end_time - start_time) / 60.0
+    print("Total execution time = %5.2f" % (execution_time))    
