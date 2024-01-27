@@ -35,14 +35,13 @@ const App = () => {
 };
 
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
   const LoginButton = () => {
     const {authorize} = useAuth0();
 
     const onPress = async () => {
         try {
             await authorize();
-            () => navigation.navigate('Gallery');
         } catch (e) {
             console.log(e);
         }
@@ -54,7 +53,10 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <Text>Welcome to My Photo Album</Text>
-      <LoginButton />
+      <Button
+        title="Go to Gallery"
+        onPress={() => navigation.navigate('Gallery')}
+      />
     </View>
   );
 };
@@ -67,7 +69,6 @@ const GalleryScreen = ({navigation}) => {
     const onPress = async () => {
         try {
             await clearSession();
-            () => navigation.navigate('Home');
         } catch (e) {
             console.log(e);
         }
@@ -83,7 +84,10 @@ const GalleryScreen = ({navigation}) => {
         title="Go to Result"
         onPress={() => navigation.navigate('Result')}
       />
-      <LogoutButton />
+      <Button
+        title="Logout"
+        onPress={() => navigation.navigate('Home')}
+      />
     </View>
   );
 };
