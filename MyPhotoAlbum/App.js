@@ -6,10 +6,14 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
+import * as ImagePicker from 'expo-image-picker';
+
+
 const Stack = createNativeStackNavigator();
 
 const App = () => {
   return (
+    // This is where the main headers names for each page are declared
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
@@ -30,14 +34,38 @@ const App = () => {
   );
 };
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = ({ navigation }) => {
+  const handleButtonPress = async () => {
+    // Ask for permission
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Sorry, we need camera roll permissions to make this work!');
+      return;
+    }
+
+    // Open image picker
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      // allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+      allowsMultipleSelection: true,
+    });
+
+    if (!result.cancelled) {
+      navigation.navigate('Gallery', { image: result.uri });
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Text>Welcome to My Photo Album</Text>
-      <Button
-        title="Go to Gallery"
-        onPress={() => navigation.navigate('Gallery')}
-      />
+      <Text>Project description</Text>
+      <View style={styles.projectDescription}>
+        <Button
+          title="Get Started!"
+          onPress={handleButtonPress}
+        />
+      </View>
     </View>
   );
 };
@@ -64,12 +92,16 @@ const ResultScreen = ({navigation, route}) => {
   );
 };
 
+// Some basic styling for the app
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  projectDescription: {
+    marginTop: 50,
   },
 });
 
