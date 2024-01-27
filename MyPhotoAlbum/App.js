@@ -5,44 +5,77 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 // import Result from './screens/result';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {useAuth0, Auth0Provider} from 'react-native-auth0';
 
 const Stack = createNativeStackNavigator();
+const domain = "dev-vapqp1wmfekebndw.us.auth0.com";
+const clientId = "BBttm33VHusqmAIQlWCcw8QVKKVrFtLe";
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Homepage"
-          component={HomeScreen}
-          options={{title: 'Welcome to My Photo Album'}}
-        />
-        <Stack.Screen
-          name="Gallery"
-          component={GalleryScreen}
-        />
-        <Stack.Screen
-          name="Result"
-          component={ResultScreen}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Auth0Provider domain={domain} clientId={clientId}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+          />
+          <Stack.Screen
+            name="Gallery"
+            component={GalleryScreen}
+          />
+          <Stack.Screen
+            name="Result"
+            component={ResultScreen}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Auth0Provider>
   );
 };
 
-const HomeScreen = ({navigation}) => {
+
+const HomeScreen = () => {
+  const LoginButton = () => {
+    const {authorize} = useAuth0();
+
+    const onPress = async () => {
+        try {
+            await authorize();
+            () => navigation.navigate('Gallery');
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    return <Button onPress={onPress} title="Log in" />
+  }
+
   return (
     <View style={styles.container}>
       <Text>Welcome to My Photo Album</Text>
-      <Button
-        title="Go to Gallery"
-        onPress={() => navigation.navigate('Gallery')}
-      />
+      <LoginButton />
     </View>
   );
 };
 
-const GalleryScreen = ({navigation, route}) => {
+const GalleryScreen = ({navigation}) => {
+
+  const LogoutButton = () => {
+    const {clearSession} = useAuth0();
+
+    const onPress = async () => {
+        try {
+            await clearSession();
+            () => navigation.navigate('Home');
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    return <Button onPress={onPress} title="Log out" />
+  }
+
   return (
     <View style={styles.container}>
       <Text>This is the Gallery Page</Text>
@@ -50,11 +83,12 @@ const GalleryScreen = ({navigation, route}) => {
         title="Go to Result"
         onPress={() => navigation.navigate('Result')}
       />
+      <LogoutButton />
     </View>
   );
 };
 
-const ResultScreen = ({navigation, route}) => {
+const ResultScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <Text>This is the Result Page</Text>

@@ -1,5 +1,13 @@
 {
   "expo": {
+    "plugins": [
+      [
+        "react-native-auth0",
+        {
+          "domain": "dev-vapqp1wmfekebndw.us.auth0.com"
+        }
+      ]
+    ],
     "name": "MyPhotoAlbum",
     "slug": "MyPhotoAlbum",
     "version": "1.0.0",
@@ -15,16 +23,23 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.jemzu.MyPhotoAlbum"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.jemzu.MyPhotoAlbum"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "dc3cf620-7f12-4207-a230-9a2d8eba2633"
+      }
     }
   }
 }
