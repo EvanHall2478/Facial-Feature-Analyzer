@@ -35,6 +35,7 @@ const App = () => {
 };
 
 // Asks the user for permission to access their photo library and redirects to the "GalleryScreen"
+// TODO: How do I push the picuture images onto the KINTON database?
 const HomeScreen = ({ navigation }) => {
   const handleButtonPress = async () => {
     // Ask for permission
@@ -52,7 +53,6 @@ const HomeScreen = ({ navigation }) => {
       quality: 1,
       allowsMultipleSelection: true,
     });
-    console.log(!result.canceled)
 
     if (!result.canceled) {
       navigation.navigate('Gallery', { image: result.uri });
@@ -73,6 +73,7 @@ const HomeScreen = ({ navigation }) => {
   );
 };
 
+// This is where data from the kinton DB will be selectively displayed and pulled.
 const GalleryScreen = ({navigation, route}) => {
   return (
     <View style={styles.container}>
