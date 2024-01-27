@@ -2,6 +2,17 @@ from PIL import Image
 from PIL.ExifTags import TAGS
 import requests
 import os
+from datetime import datetime
+import time
+
+def ImageDetails(image_path):
+    image = Image.open(image_path)
+    exif_data = image._getexif()
+    exif = {TAGS.get(tag, tag): value for tag, value in exif_data.items()} if exif_data else {}
+    GPSInfo = exif.get('GPSInfo')
+    timeInfo = exif.get('DateTime')
+    
+    return GPSInfo, timeInfo
 
 def dms_to_decimal(coordinates, direction):
     degrees = coordinates[0]
@@ -30,19 +41,36 @@ def get_city_name(latitude, longitude):
         print(f"Error: {response.status_code}")
         return None
 
+def main():
+    DIR = r"C:\Users\16134\iCloudPhotos\Photos"
+    start_time = time.time()
+    image_cities = set()
+    image_time = set()
+
+    for index, i in enumerate(os.listdir(DIR)):
+        file_type = i[-3:].lower()
+        img_path = os.path.join(DIR, i)
+
+        if file_type == 'jpg':
+            current_GPS_info, current_time_info = ImageDetails(img_path)
+
+            if current_GPS_info != None:
+                latitude = dms_to_decimal(current_GPS_info[2], current_GPS_info[1])
+                longitude = dms_to_decimal(current_GPS_info[4], current_GPS_info[3])
+                city = get_city_name(float(latitude), float(longitude))
+                image_cities.add(city)
+
+            if current_time_info != None:
+                image_date = datetime.strptime(current_time_info, "%Y:%m:%d %H:%M:%S").date()
+                image_time.add(image_date)
+
+
+    print(index)
+    print(image_cities)
+    print(image_time)
+    end_time = time.time()
+    total_time = (end_time - start_time)/60
+    print("Total execution time = %5.2f" % (total_time))
+
 if __name__ == '__main__': 
-    image_path = r"C:\Users\16134\iCloudPhotos\Photos\IMG_1094.JPG"
-    image = Image.open(image_path)
-    exif_data = image._getexif()
-    exif = {TAGS.get(tag, tag): value for tag, value in exif_data.items()} if exif_data else {}
-    GPSInfo = exif.get('GPSInfo')
-    print(GPSInfo)
-
-    latitude = dms_to_decimal(GPSInfo[2], GPSInfo[1])
-    longitude = dms_to_decimal(GPSInfo[4], GPSInfo[3])
-    city = get_city_name(float(latitude), float(longitude))
-    print(f"The city name is: {city}")
-
-    DIR = r'C:\Users\16134\iCloudPhotos\Photos'
-    for i in os.listdir(DIR): 
-        print(i)
+    main()
