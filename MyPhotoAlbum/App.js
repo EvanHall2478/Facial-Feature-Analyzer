@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, View} from 'react-native';
 // import Gallery from './screens/gallery';
 // import Homepage from './screens/homrepage';
 // import Result from './screens/result';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-
+import { Button, Text } from 'react-native-paper';
+import { useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 
 import {useAuth0, Auth0Provider} from 'react-native-auth0';
@@ -43,24 +44,24 @@ const App = () => {
 const HomeScreen = ({ navigation }) => {
   const handleButtonPress = async () => {
     // Ask for permission
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      alert('Sorry, we need camera roll permissions to make this work!');
-      return;
-    }
+    // const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    // if (status !== 'granted') {
+    //   alert('Sorry, we need camera roll permissions to make this work!');
+    //   return;
+    // }
 
     // Open image picker
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      // allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-      allowsMultipleSelection: true,
-    });
+    // const result = await ImagePicker.launchImageLibraryAsync({
+    //   mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    //   // allowsEditing: true,
+    //   aspect: [4, 3],
+    //   quality: 1,
+    //   allowsMultipleSelection: true,
+    // });
 
-    if (!result.canceled) {
-      navigation.navigate('Gallery', { image: result.uri });
-    } 
+    // if (!result.canceled) {
+    navigation.navigate('Gallery');
+    // } 
 
   };
 
@@ -75,17 +76,18 @@ const HomeScreen = ({ navigation }) => {
         }
     };
 
-    return <Button onPress={onPress} title="Log in" />
+    return <Button mode="contained" onPress={onPress} title="Log in" />
   }
 
   return (
     <View style={styles.container}>
-      <Text>Project description</Text>
+      <Text>"Welcome to an extraordinary journey, where the unexpected becomes the norm, and every turn unveils a new horizon of possibilities. As we embark on this adventure together, let's throw open the doors to imagination, let curiosity be our guide, and innovation our constant companion. In this realm, ideas dance freely, weaving a tapestry of creativity that stretches beyond the conventional. So, fasten your seatbelt and prepare for a delightful voyage through the uncharted territories of our collective minds, where each discovery is a celebration of the incredible tapestry of human thought and ingenuity."</Text>
       <View style={styles.projectDescription}>
-        <Button
-          title="Get Started!"
-          onPress={handleButtonPress}
-        />
+      <Button 
+        mode="contained"
+        onPress={handleButtonPress}>
+        Get Started!
+      </Button>
       </View>
     </View>
     //insert LoginButton here when done
@@ -93,37 +95,64 @@ const HomeScreen = ({ navigation }) => {
 };
 
 // This is where data from the kinton DB will be selectively displayed and pulled.
-const GalleryScreen = ({navigation}) => {
+const GalleryScreen = ({ navigation }) => {
+  const handleButtonPress = async () => {
+    // Ask for permission
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Sorry, we need camera roll permissions to make this work!');
+      return;
+    }
+
+    // Open image picker
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      aspect: [4, 3],
+      quality: 1,
+      allowsMultipleSelection: true,
+    });
+
+    if (!result.canceled) {
+      navigation.navigate('Gallery', { image: result.uri });
+    }
+    console.log(result)
+  };
+
+  useEffect(() => {
+    handleButtonPress();
+  }, []);
 
   const LogoutButton = () => {
-    const {clearSession} = useAuth0();
+    const { clearSession } = useAuth0();
 
     const onPress = async () => {
-        try {
-            await clearSession();
-        } catch (e) {
-            console.log(e);
-        }
+      try {
+        await clearSession();
+      } catch (e) {
+        console.log(e);
+      }
     };
 
-    return <Button onPress={onPress} title="Log out" />
-  }
+    return <Button onPress={onPress} title="Log out" />;
+  };
 
   return (
     <View style={styles.container}>
       <Text>This is the Gallery Page</Text>
       <View style={styles.projectDescription}>
-        <Button
-          title="Go to Result"
-          onPress={() => navigation.navigate('Result')}
-      />
+        <Button mode="contained" onPress={() => navigation.navigate('Result')}>
+          Go to Result
+        </Button>
       </View>
       <Button
         title="Logout"
         onPress={() => navigation.navigate('Home')}
-      />
+        mode="contained"
+        buttonColor="maroon"
+      >
+        Logout
+      </Button>
     </View>
-    //insert LogoutButton here when done
   );
 };
 
@@ -131,8 +160,12 @@ const ResultScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <Text>This is the Result Page</Text>
-      <Button title="Go back to Gallery" onPress={() => navigation.goBack()}
-      />
+      <Button 
+        // title="Go back to Gallery"
+         onPress={() => navigation.goBack()}
+         mode='contained'>
+        Go back to Gallery
+        </Button>
     </View>
   );
 };
@@ -150,7 +183,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingHorizontal: 15,
     paddingVertical: 10,
-    backgroundColor: '#b29a84', // Earthy tone for buttons and other elements
+    // backgroundColor: '#b29a84', // Earthy tone for buttons and other elements
     borderRadius: 10,
   },
   text: {
