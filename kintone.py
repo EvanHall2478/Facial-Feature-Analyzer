@@ -45,6 +45,5 @@ if __name__ == '__main__':
     # Check the response status
     if response.status_code == 200:
         print("Data imported successfully!")
-        print(response.json())
     else:
         print("Failed to import data:", response.text)

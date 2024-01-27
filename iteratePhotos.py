@@ -5,6 +5,10 @@ import os
 from datetime import datetime
 import time
 from deepface import DeepFace
+import openpyxl
+
+wb = openpyxl.Workbook()
+ws = wb.active
 
 # Global Image Data handler class
 class ImageData:
@@ -104,8 +108,10 @@ if __name__ == '__main__':
         if file_type == 'jpg':
             current_image = ImageData(img_path)
             current_image.__strAll__()
+            ws.append([current_image.image_path, current_image.time_taken, current_image.location, current_image.emotion])
+            wb.save('images_database.xlsx')
 
     print(index)
     end_time = time.time()
     execution_time = (end_time - start_time) / 60.0
-    print("Total execution time = %5.2f" % (execution_time))    
+    print("Total execution time = %5.2f" % (execution_time))
