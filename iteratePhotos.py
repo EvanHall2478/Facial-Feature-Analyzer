@@ -40,10 +40,19 @@ def get_city_name(latitude, longitude):
     else:
         print(f"Error: {response.status_code}")
         return None
+    
+def location_filter(database, city):
+    filtered_images = {image: details for image, details in database.items() if details['Location'].lower() == city.lower()}
+    return filtered_images
+
+def time_filter(database, week):
+    filtered_images = {image: details for image, details in database.items() if details['Date'].lower() == week.lower()}
+    return filtered_images
 
 def main():
     DIR = r"C:\Users\16134\iCloudPhotos\Photos"
     start_time = time.time()
+    image_dict = {}
     image_cities = set()
     image_time = set()
 
@@ -54,20 +63,23 @@ def main():
         if file_type == 'jpg':
             current_GPS_info, current_time_info = ImageDetails(img_path)
 
+            city = None
             if current_GPS_info != None:
                 latitude = dms_to_decimal(current_GPS_info[2], current_GPS_info[1])
                 longitude = dms_to_decimal(current_GPS_info[4], current_GPS_info[3])
                 city = get_city_name(float(latitude), float(longitude))
-                image_cities.add(city)
 
+            image_date = None
             if current_time_info != None:
                 image_date = datetime.strptime(current_time_info, "%Y:%m:%d %H:%M:%S").date()
-                image_time.add(image_date)
+            image_dict[img_path] = {'Location': city, 'Date': image_date}
 
+    ottawa_images = location_filter(image_dict, 'Ottawa')
+    print(ottawa_images)
 
     print(index)
-    print(image_cities)
-    print(image_time)
+    # print(image_cities)
+    # print(image_time)
     end_time = time.time()
     total_time = (end_time - start_time)/60
     print("Total execution time = %5.2f" % (total_time))
