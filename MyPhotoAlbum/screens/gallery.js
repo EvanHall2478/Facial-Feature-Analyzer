@@ -1,14 +1,11 @@
 import React from 'react';
-import { View, Button } from 'react-native';
+import { View, Text } from 'react-native';
 
-const Gallery = ({ navigation }) => {
-    const redirectToResultPage = () => {
-        navigation.navigate('Result');
-    };
+const Gallery = () => {
 
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Button title="Go to Result Page" onPress={redirectToResultPage} />
+            <Text>Gallery page</Text>
         </View>
     );
 };

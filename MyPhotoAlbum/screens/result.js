@@ -1,18 +1,12 @@
-// Import the necessary modules
 import React from 'react';
-import { View, Button } from 'react-native';
+import { View, Text } from 'react-native';
 
-// Define the ResultScreen component
-const Result = ({ navigation }) => {
-    // Function to navigate back to the gallery page
-    const goBackToGallery = () => {
-        navigation.navigate('Gallery');
-    };
+
+const Result = () => {
 
     return (
         <View>
-            {/* Button to go back to the gallery page */}
-            <Button title="Go Back to Gallery" onPress={goBackToGallery} />
+            <Text>This is the Result Page</Text>
         </View>
     );
 };
