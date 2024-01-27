@@ -5,11 +5,11 @@ import numpy as np
 def create_train(): 
     faces_roi = None
     people = []
-    for i in os.listdir(r'C:\Users\16134\OneDrive\Documents\Learning\Software\Courses\OpenCV\Photos'): 
+    for i in os.listdir(r'C:\Users\evanh\Software\UofTHacks\NostalgicMobilePhotoAlbum\Photos'): 
         people.append(i) 
     print(people) 
 
-    DIR = r'C:\Users\16134\OneDrive\Documents\Learning\Software\Courses\OpenCV\Photos'
+    DIR = r'C:\Users\evanh\Software\UofTHacks\NostalgicMobilePhotoAlbum\Photos'
     haar_cascade = cv.CascadeClassifier(r'haar_face.xml')
 
     features = [] 
