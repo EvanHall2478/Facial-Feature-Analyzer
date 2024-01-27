@@ -195,6 +195,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 20,
   },
+  dropdown: {
+    height: 50,
+    backgroundColor: 'transparent',
+    borderBottomColor: 'gray',
+    borderBottomWidth: 0.5,
+  },
   projectDescription: {
     marginTop: 20,
     paddingHorizontal: 15,
