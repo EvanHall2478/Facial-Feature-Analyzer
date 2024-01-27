@@ -1,14 +1,15 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 // import Gallery from './screens/gallery';
 // import Homepage from './screens/homrepage';
 // import Result from './screens/result';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-
 import * as ImagePicker from 'expo-image-picker';
 
 import {useAuth0, Auth0Provider} from 'react-native-auth0';
+import { MultiSelect } from 'react-native-element-dropdown';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const Stack = createNativeStackNavigator();
 const domain = "dev-vapqp1wmfekebndw.us.auth0.com";
@@ -92,23 +93,71 @@ const HomeScreen = ({ navigation }) => {
   );
 };
 
+const data = [
+  { label: 'Item 1', value: '1' },
+  { label: 'Item 2', value: '2' },
+  { label: 'Item 3', value: '3' },
+  { label: 'Item 4', value: '4' },
+  { label: 'Item 5', value: '5' },
+  { label: 'Item 6', value: '6' },
+  { label: 'Item 7', value: '7' },
+  { label: 'Item 8', value: '8' },
+];
+
+const MultiSelectComponent = () => {
+  const [selected, setSelected] = useState([]);
+
+  return (
+    <View style={styles.container}>
+      <MultiSelect
+        style={styles.dropdown}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
+        inputSearchStyle={styles.inputSearchStyle}
+        iconStyle={styles.iconStyle}
+        search
+        data={data}
+        labelField="label"
+        valueField="value"
+        placeholder="Select item"
+        searchPlaceholder="Search..."
+        value={selected}
+        onChange={item => {
+          setSelected(item);
+        }}
+        renderLeftIcon={() => (
+          <AntDesign
+            style={styles.icon}
+            color="black"
+            name="Safety"
+            size={20}
+          />
+        )}
+        selectedStyle={styles.selectedStyle}
+      />
+    </View>
+  );
+};
+
 // This is where data from the kinton DB will be selectively displayed and pulled.
-const GalleryScreen = ({navigation}) => {
+const GalleryScreen = ({ navigation }) => {
+
+  MultiSelectComponent();
 
   const LogoutButton = () => {
-    const {clearSession} = useAuth0();
+    const { clearSession } = useAuth0();
 
     const onPress = async () => {
-        try {
-            await clearSession();
-        } catch (e) {
-            console.log(e);
-        }
+      try {
+        await clearSession();
+      } catch (e) {
+        console.log(e);
+      }
     };
 
     return <Button onPress={onPress} title="Log out" />
   }
-
+  
   return (
     <View style={styles.container}>
       <Text>This is the Gallery Page</Text>
@@ -116,7 +165,7 @@ const GalleryScreen = ({navigation}) => {
         <Button
           title="Go to Result"
           onPress={() => navigation.navigate('Result')}
-      />
+        />
       </View>
       <Button
         title="Logout"
@@ -169,6 +218,26 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 16,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 14,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  selectedStyle: {
+    borderRadius: 12,
   },
 });
 
