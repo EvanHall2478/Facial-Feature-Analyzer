@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kintone Data</title>
+</head>
+<body>
+    <h1>Data from Kintone</h1>
+    <ul>
+        {% for record in data %}
+            <li>{{ record['field_code']['value'] }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
