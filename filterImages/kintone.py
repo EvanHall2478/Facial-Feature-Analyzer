@@ -2,10 +2,9 @@ import requests
 import openpyxl
 import pandas as pd
 import json
-# import os
 
-# wb = openpyxl.load_workbook(r'images_database.xlsx')
-wb = openpyxl.load_workbook(r"C:\Users\evanh\Software\UofTHacks\NostalgicMobilePhotoAlbum\filterImages\images_database.xlsx")
+wb = openpyxl.load_workbook(r'images_database.xlsx')
+# wb = openpyxl.load_workbook(r"C:\Users\evanh\Software\UofTHacks\NostalgicMobilePhotoAlbum\filterImages\images_database.xlsx")
 ws = wb.active
 
 def addDatabase():
@@ -37,7 +36,7 @@ def addDatabase():
         }
 
         for index, row in df.iterrows():
-            print(type(row["Time"]), type(row["Location"]), type(row["Emotion"]))
+            # print(type(row["Time"]), type(row["Location"]), type(row["Emotion"]))
             record = {
                 "image_path": {"value": row["Path"]},
                 "date": {"value": row["Time"]},  
