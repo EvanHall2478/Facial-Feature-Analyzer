@@ -55,6 +55,7 @@ def addDatabase():
         else:
             print("Failed to import data:", response.text)
 
+#Delete batch of 100 records at a time
 def deleteDatabase():
     endpoint = r"https://myphotoalbumdb.kintone.com/k/v1/records.json?app=1&id=1"
     api_key = r"6I59Yzq0u6g2L3gc6oQchsMccyfBjpif7e4tfZmx"
@@ -66,9 +67,6 @@ def deleteDatabase():
     else:
         print('Failed to retrieve records:', response.text)
         
-    # if len(records) == 0:
-    #     print('No records to delete')
-    #     return False
     # Prepare the data to be deleted
     data = {
         'app': 1,
@@ -96,6 +94,5 @@ def deleteDatabase():
 
 if __name__ == '__main__': 
     # addDatabase()
-    for i in range(20): 
-    # while deleteDatabase!=False:
+    while deleteDatabase():
         deleteDatabase()
