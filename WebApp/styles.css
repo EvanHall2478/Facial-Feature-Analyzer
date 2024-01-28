@@ -1,12 +1,16 @@
-.photos-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.dynamic-container {
+    display: grid;
+    grid-template-rows: 1fr 1fr; /* Two rows with equal height */
+    grid-template-columns: 1fr 1fr; /* Two columns with equal width */
+    grid-gap: 0px;
+    justify-items: center; /* Align items horizontally in the center */
+    align-items: center; /* Align items vertically in the center */
+    width: 700px; /* Set a fixed width for the container */
+    height: 700px; /* Set a fixed height for the container */
+    margin: 5% auto; /* Center the container on the page */
 }
-
-.photo-box {
-    width: 250px;
-    height: 250px;
-    border: 4px solid black;
-    margin: 10px;
+.dynamic-image {
+    width: 100%; /* Set width to 100% */
+    object-fit: scale-down; /* Scale the image to cover the entire container */
+    border: 0px solid black; /* Add a 2px solid black border around the images */
 }
