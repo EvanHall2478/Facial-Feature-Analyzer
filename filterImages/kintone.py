@@ -58,7 +58,7 @@ def deleteDatabase():
 
     data = {
         'app': 1,
-        'ids': [i for i in range(15, 75)]  # Replace with the actual record IDs you want to delete
+        'ids': [i for i in range(15, 59)]  # Replace with the actual record IDs you want to delete
     }
     response = requests.delete(endpoint, data=json.dumps(data), headers={"X-Cybozu-API-Token": api_key})
     if response.status_code == 200:
@@ -68,4 +68,4 @@ def deleteDatabase():
 
 
 if __name__ == '__main__': 
-    deleteDatabase()
+    addDatabase()

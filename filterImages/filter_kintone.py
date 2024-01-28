@@ -1,11 +1,16 @@
 import requests
 
-def get_filtered_records(field_code, value_to_match):
+def get_filtered_records(query_list):
     url = f"https://myphotoalbumdb.kintone.com/k/v1/records.json"
     headers = {
         "X-Cybozu-API-Token": r"6I59Yzq0u6g2L3gc6oQchsMccyfBjpif7e4tfZmx",
     }
-    query = f"{field_code} = \"{value_to_match}\""
+    # query = f"{field_code} = \"{value_to_match}\""
+    output_list = []
+    for tup in query_list:
+        output_list.append(f'{tup[0]} = "{tup[1]}"')
+    query = " and ".join(output_list)
+
     params = {
         "app": 1,
         "query": query,
@@ -38,9 +43,12 @@ def clean_up_records(filtered_records):
     return extracted_data
 
 if __name__ == '__main__': 
-    field_code = 'location'  
-    value_to_match = 'Ottawa'  
-
-    filtered_records = get_filtered_records(field_code, value_to_match)
+    # query_list = [('emotion', 'happy'), ('location', 'Ottawa'), ("date_time", "")]
+    query_list = [('location', 'ညောင်ဦး')]
+    filtered_records = get_filtered_records(query_list)
     extracted_data = clean_up_records(filtered_records)
+    print(len(extracted_data))
     print(extracted_data)
+
+
+
