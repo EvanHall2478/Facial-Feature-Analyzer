@@ -2,8 +2,10 @@ import requests
 import openpyxl
 import pandas as pd
 import json
+# import os
 
-wb = openpyxl.load_workbook(r'images_database.xlsx')
+# wb = openpyxl.load_workbook(r'images_database.xlsx')
+wb = openpyxl.load_workbook(r"C:\Users\evanh\Software\UofTHacks\NostalgicMobilePhotoAlbum\filterImages\images_database.xlsx")
 ws = wb.active
 
 def addDatabase():
@@ -11,7 +13,7 @@ def addDatabase():
     iterations = []
     rows_list = []
     for index, i in enumerate(ws.iter_rows(values_only=True)): # API can only do 100 entries at a time
-        row_data = {'Path': i[0], 'Time': i[1], 'Location': i[2], 'Emotion': i[3]}
+        row_data = {'Path': i[0], 'Time': str(i[1]), 'Location': i[2], 'Emotion': i[3]}
         rows_list.append(row_data)
         if index % 99 == 0:
             iterations.append(rows_list)
@@ -35,9 +37,10 @@ def addDatabase():
         }
 
         for index, row in df.iterrows():
+            print(type(row["Time"]), type(row["Location"]), type(row["Emotion"]))
             record = {
                 "image_path": {"value": row["Path"]},
-                "time_date": {"value": str(row["Time"])},
+                "date": {"value": row["Time"]},  
                 "location": {"value": row["Location"]},
                 "emotion": {"value": row["Emotion"]},
             }
