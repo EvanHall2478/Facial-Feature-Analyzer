@@ -27,28 +27,15 @@ def get_filtered_records(query_list):
 def clean_up_records(filtered_records):
     extracted_data = []
     for item in filtered_records:
-    # Extract the required fields and their values
         image_path = item.get('image_path', {}).get('value', '')
-        location = item.get('location', {}).get('value', '')
-        datetime = item.get('date_time', {}).get('value', '')  # Assuming you want the 'date_time' field
-        emotion = item.get('emotion', {}).get('value', '')
-
-        extracted_data.append({
-        'image_path': image_path,
-        'location': location,
-        'datetime': datetime,
-        'emotion': emotion
-    })
+        extracted_data.append(image_path)
         
     return extracted_data
 
 if __name__ == '__main__': 
-    # query_list = [('emotion', 'happy'), ('location', 'Ottawa'), ("date_time", "")]
-    query_list = [('location', 'ညောင်ဦး')]
+    query_list = [('emotion', 'happy'), ('location', 'Ottawa')]
     filtered_records = get_filtered_records(query_list)
     extracted_data = clean_up_records(filtered_records)
     print(len(extracted_data))
     print(extracted_data)
-
-
 

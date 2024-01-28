@@ -34,7 +34,7 @@ class ImageData:
     def get_time_taken(self):
         raw_time_info = self.__ImageDetails__()[1]
         if raw_time_info != None:
-            raw_time_info = datetime.strptime(raw_time_info, "%Y:%m:%d %H:%M:%S").date()
+            raw_time_info = datetime.strptime(raw_time_info, "%Y:%m:%d %H:%M:%S")
 
         return raw_time_info
 

@@ -87,14 +87,36 @@ def addDatabase():
             print("Failed to import data:", response.text)
 
 def deleteDatabase():
-    endpoint = r"https://myphotoalbumdb.kintone.com/k/v1/records.json"
+    endpoint = r"https://myphotoalbumdb.kintone.com/k/v1/records.json?app=1&id=1"
     api_key = r"6I59Yzq0u6g2L3gc6oQchsMccyfBjpif7e4tfZmx"
 
+    # Get all records from the database
+    response = requests.get(endpoint, headers={"X-Cybozu-API-Token": api_key})
+    if response.status_code == 200:
+        records = response.json().get('records', [])
+    else:
+        print('Failed to retrieve records:', response.text)
+    if len(response) == 0:
+        return False
+    # Prepare the data to be deleted
     data = {
         'app': 1,
-        'ids': [i for i in range(15, 59)]  # Replace with the actual record IDs you want to delete
+        'ids': [record['$id']['value'] for record in records]
     }
-    response = requests.delete(endpoint, data=json.dumps(data), headers={"X-Cybozu-API-Token": api_key})
+
+    # Delete the records in batches
+    batch_size = 100
+    for i in range(0, len(data['ids']), batch_size):
+        batch_ids = data['ids'][i:i+batch_size]
+        batch_data = {
+            'app': 1,
+            'ids': batch_ids
+        }
+        response = requests.delete(endpoint, json=batch_data, headers={"X-Cybozu-API-Token": api_key})
+        if response.status_code == 200:
+            print(f'Deleted {len(batch_ids)} records successfully')
+        else:
+            print('Failed to delete records:', response.text)
     if response.status_code == 200:
         print('Records deleted successfully')
     else:
