@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { StyleSheet, View} from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, Button } from 'react-native';
 // import Gallery from './screens/gallery';
 // import Homepage from './screens/homrepage';
 // import Result from './screens/result';
@@ -10,6 +10,8 @@ import { useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 
 import {useAuth0, Auth0Provider} from 'react-native-auth0';
+import { MultiSelect } from 'react-native-element-dropdown';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const Stack = createNativeStackNavigator();
 const domain = "dev-vapqp1wmfekebndw.us.auth0.com";
@@ -94,8 +96,54 @@ const HomeScreen = ({ navigation }) => {
   );
 };
 
+const data = [
+  { label: 'Item 1', value: '1' },
+  { label: 'Item 2', value: '2' },
+  { label: 'Item 3', value: '3' },
+  { label: 'Item 4', value: '4' },
+  { label: 'Item 5', value: '5' },
+  { label: 'Item 6', value: '6' },
+  { label: 'Item 7', value: '7' },
+  { label: 'Item 8', value: '8' },
+];
+
+const MultiSelectComponent = () => {
+  const [selected, setSelected] = useState([]);
+
+  return (
+    <View style={styles.container}>
+      <MultiSelect
+        style={styles.dropdown}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
+        inputSearchStyle={styles.inputSearchStyle}
+        iconStyle={styles.iconStyle}
+        search
+        data={data}
+        labelField="label"
+        valueField="value"
+        placeholder="Select item"
+        searchPlaceholder="Search..."
+        value={selected}
+        onChange={item => {
+          setSelected(item);
+        }}
+        renderLeftIcon={() => (
+          <AntDesign
+            style={styles.icon}
+            color="black"
+            name="Safety"
+            size={20}
+          />
+        )}
+        selectedStyle={styles.selectedStyle}
+      />
+    </View>
+  );
+};
+
 // This is where data from the kinton DB will be selectively displayed and pulled.
-const GalleryScreen = ({ navigation }) => {
+const GalleryScreen = ({  navigation  }) => {
   const handleButtonPress = async () => {
     // Ask for permission
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -122,6 +170,8 @@ const GalleryScreen = ({ navigation }) => {
     handleButtonPress();
   }, []);
 
+  MultiSelectComponent();
+
   const LogoutButton = () => {
     const { clearSession } = useAuth0();
 
@@ -135,7 +185,7 @@ const GalleryScreen = ({ navigation }) => {
 
     return <Button onPress={onPress} title="Log out" />;
   };
-
+  
   return (
     <View style={styles.container}>
       <Text>This is the Gallery Page</Text>
@@ -202,6 +252,26 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 16,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 14,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  selectedStyle: {
+    borderRadius: 12,
   },
 });
 
