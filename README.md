@@ -1,7 +1,7 @@
-This is where we are creating our project for UoT Hack 11 ! This is basically a photo album:
+This is our project for U of T Hacks 11.
 
+It *was* supposed to be a mobile app that takes the photos from your phone and organizes them into a pretty photo album based on the options and themes you can select, but difficulties happened and now we have a web app too T-T.
 
-ADD DETAILS AND FUNCTIONALITY OF THE APP !!!
+ggs
 
-TO DO: Need to prevent user from going to the next page if they don't allow for library image permission in Homescreen in App.js
 
