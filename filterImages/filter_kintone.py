@@ -1,11 +1,16 @@
 import requests
 
-def get_filtered_records(field_code, value_to_match):
+def get_filtered_records(query_list):
     url = f"https://myphotoalbumdb.kintone.com/k/v1/records.json"
     headers = {
         "X-Cybozu-API-Token": r"6I59Yzq0u6g2L3gc6oQchsMccyfBjpif7e4tfZmx",
     }
-    query = f"{field_code} = \"{value_to_match}\""
+    # query = f"{field_code} = \"{value_to_match}\""
+    output_list = []
+    for tup in query_list:
+        output_list.append(f'{tup[0]} = "{tup[1]}"')
+    query = " and ".join(output_list)
+
     params = {
         "app": 1,
         "query": query,
@@ -22,25 +27,18 @@ def get_filtered_records(field_code, value_to_match):
 def clean_up_records(filtered_records):
     extracted_data = []
     for item in filtered_records:
-    # Extract the required fields and their values
         image_path = item.get('image_path', {}).get('value', '')
-        location = item.get('location', {}).get('value', '')
-        datetime = item.get('date_time', {}).get('value', '')  # Assuming you want the 'date_time' field
-        emotion = item.get('emotion', {}).get('value', '')
-
-        extracted_data.append({
-        'image_path': image_path,
-        'location': location,
-        'datetime': datetime,
-        'emotion': emotion
-    })
+        extracted_data.append(image_path)
         
     return extracted_data
 
 if __name__ == '__main__': 
-    field_code = 'location'  
-    value_to_match = 'Ottawa'  
-
-    filtered_records = get_filtered_records(field_code, value_to_match)
+    query_list = [('emotion', 'happy'), ('location', 'Ottawa')]
+    filtered_records = get_filtered_records(query_list)
     extracted_data = clean_up_records(filtered_records)
+    print(len(extracted_data))
     print(extracted_data)
+
+    with open('file_paths.txt', 'w') as file:
+        for path in extracted_data:
+            file.write(path + '\n') 
