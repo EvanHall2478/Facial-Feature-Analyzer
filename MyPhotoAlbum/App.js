@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-// import Gallery from './screens/gallery';
-// import Homepage from './screens/homrepage';
-// import Result from './screens/result';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import { Button, Text } from 'react-native-paper';
@@ -42,29 +39,9 @@ const App = () => {
 
 
 // Asks the user for permission to access their photo library and redirects to the "GalleryScreen"
-// TODO: How do I push the picuture images onto the KINTON database?
 const HomeScreen = ({ navigation }) => {
   const handleButtonPress = async () => {
-    // Ask for permission
-    // const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    // if (status !== 'granted') {
-    //   alert('Sorry, we need camera roll permissions to make this work!');
-    //   return;
-    // }
-
-    // Open image picker
-    // const result = await ImagePicker.launchImageLibraryAsync({
-    //   mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    //   // allowsEditing: true,
-    //   aspect: [4, 3],
-    //   quality: 1,
-    //   allowsMultipleSelection: true,
-    // });
-
-    // if (!result.canceled) {
     navigation.navigate('Gallery');
-    // } 
-
   };
 
   const LoginButton = () => {
@@ -83,12 +60,13 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text>"Welcome to an extraordinary journey, where the unexpected becomes the norm, and every turn unveils a new horizon of possibilities. As we embark on this adventure together, let's throw open the doors to imagination, let curiosity be our guide, and innovation our constant companion. In this realm, ideas dance freely, weaving a tapestry of creativity that stretches beyond the conventional. So, fasten your seatbelt and prepare for a delightful voyage through the uncharted territories of our collective minds, where each discovery is a celebration of the incredible tapestry of human thought and ingenuity."</Text>
+      <Text style={styles.title}>Welcome to My Photo Album!</Text>
+      <Text style={styles.text}>Use My Photo Album to create a unique and exiting photo album using the pictures already on your phone! Choose from 5 different filters to capture an experience and all the nostagia from the photos you've taken, and let us compile it into a carefully procured selection of pictures for your photo album.</Text>
       <View style={styles.projectDescription}>
       <Button 
         mode="contained"
         onPress={handleButtonPress}>
-        Get Started!
+        Login
       </Button>
       </View>
     </View>
@@ -96,15 +74,13 @@ const HomeScreen = ({ navigation }) => {
   );
 };
 
-const data = [
-  { label: 'Item 1', value: '1' },
-  { label: 'Item 2', value: '2' },
-  { label: 'Item 3', value: '3' },
-  { label: 'Item 4', value: '4' },
-  { label: 'Item 5', value: '5' },
-  { label: 'Item 6', value: '6' },
-  { label: 'Item 7', value: '7' },
-  { label: 'Item 8', value: '8' },
+//code heavily inspired by https://www.npmjs.com/package/react-native-element-dropdown
+const options = [
+  { label: 'People', value: '1' },
+  { label: 'Locations', value: '2' },
+  { label: 'Vibe', value: '3' },
+  { label: 'Emotions', value: '4' },
+  { label: 'Time', value: '5' },
 ];
 
 const MultiSelectComponent = () => {
@@ -112,16 +88,17 @@ const MultiSelectComponent = () => {
 
   return (
       <MultiSelect
+      //styling and options for the dropdown menu
         style={styles.dropdown}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
         search
-        data={data}
+        data={options}
         labelField="label"
         valueField="value"
-        placeholder="Select item"
+        placeholder="Select filters"
         searchPlaceholder="Search..."
         value={selected}
         onChange={item => {
@@ -131,7 +108,7 @@ const MultiSelectComponent = () => {
           <AntDesign
             style={styles.icon}
             color="black"
-            name="Safety"
+            name="filter"
             size={20}
           />
         )}
@@ -207,12 +184,11 @@ const GalleryScreen = ({  navigation  }) => {
 const ResultScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <Text>This is the Result Page</Text>
+      <Text>Your personal photo album!</Text>
       <Button 
-        // title="Go back to Gallery"
          onPress={() => navigation.goBack()}
          mode='contained'>
-        Go back to Gallery
+        Return to Gallery
         </Button>
     </View>
   );
@@ -223,9 +199,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fdf6e4', // Warm, light beige background
-    alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    padding: 10,
   },
   dropdown: {
     height: 50,
@@ -276,6 +251,14 @@ const styles = StyleSheet.create({
   },
   selectedStyle: {
     borderRadius: 12,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#604d3f', // Darker, earthy tone for text
+    textAlign: 'center',
+    fontFamily: 'Cochin', // This font has a rustic feel; ensure it's available or choose a similar one
+    marginBottom: 10,
   },
 });
 
