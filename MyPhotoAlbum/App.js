@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 // import Gallery from './screens/gallery';
 // import Homepage from './screens/homrepage';
 // import Result from './screens/result';
@@ -111,7 +111,6 @@ const MultiSelectComponent = () => {
   const [selected, setSelected] = useState([]);
 
   return (
-    <View style={styles.container}>
       <MultiSelect
         style={styles.dropdown}
         placeholderStyle={styles.placeholderStyle}
@@ -138,7 +137,6 @@ const MultiSelectComponent = () => {
         )}
         selectedStyle={styles.selectedStyle}
       />
-    </View>
   );
 };
 
@@ -170,7 +168,6 @@ const GalleryScreen = ({  navigation  }) => {
     handleButtonPress();
   }, []);
 
-  MultiSelectComponent();
 
   const LogoutButton = () => {
     const { clearSession } = useAuth0();
@@ -189,6 +186,7 @@ const GalleryScreen = ({  navigation  }) => {
   return (
     <View style={styles.container}>
       <Text>This is the Gallery Page</Text>
+      <MultiSelectComponent />
       <View style={styles.projectDescription}>
         <Button mode="contained" onPress={() => navigation.navigate('Result')}>
           Go to Result
