@@ -2,6 +2,7 @@ import requests
 import openpyxl
 import pandas as pd
 import json
+from PIL import Image
 
 wb = openpyxl.load_workbook(r'images_database.xlsx')
 ws = wb.active
@@ -31,11 +32,13 @@ if __name__ == '__main__':
     }
 
     for index, row in df.iterrows():
+        image = Image.open(row["Path"])
         record = {
             "image_path": {"value": row["Path"]},
             "time_date": {"value": str(row["Time"])},
             "location": {"value": row["Location"]},
-            "emotion": {"value": row["Emotion"]}
+            "emotion": {"value": row["Emotion"]},
+            "image": {"value:": image}
         }
         data["records"].append(record)
 
