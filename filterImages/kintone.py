@@ -2,14 +2,35 @@ import requests
 import openpyxl
 import pandas as pd
 import json
-# import os
+from PIL import Image
+from io import BytesIO
 
-# wb = openpyxl.load_workbook(r'images_database.xlsx')
-wb = openpyxl.load_workbook(r"C:\Users\evanh\Software\UofTHacks\NostalgicMobilePhotoAlbum\filterImages\images_database.xlsx")
+wb = openpyxl.load_workbook(r'images_database.xlsx')
+# wb = openpyxl.load_workbook(r"C:\Users\evanh\Software\UofTHacks\NostalgicMobilePhotoAlbum\filterImages\images_database.xlsx")
 ws = wb.active
 
-def addDatabase():
+def resize_and_upload_image(file_path):
+    # Resize the image
+    with Image.open(file_path) as img:
+        img_resized = img.resize((150, 150), Image.LANCZOS)
+        buffer = BytesIO()
+        img_resized.save(buffer, format='JPEG')
+        buffer.seek(0)
+    
+    # Upload the image
+    files = {'file': ('resized_image.jpg', buffer, 'image/jpeg')}
+    headers = {"X-Cybozu-API-Token": r"6I59Yzq0u6g2L3gc6oQchsMccyfBjpif7e4tfZmx"}
+    file_endpoint = f'https://myphotoalbumdb.kintone.com/k/v1/file.json'
 
+    response = requests.post(file_endpoint, headers=headers, files=files)
+    if response.status_code == 200:
+        file_key = response.json().get('fileKey')
+        return file_key
+    else:
+        print(f'Failed to upload image: {response.text}')
+        return None
+
+def addDatabase():
     iterations = []
     rows_list = []
     for index, i in enumerate(ws.iter_rows(values_only=True)): # API can only do 100 entries at a time
@@ -35,14 +56,18 @@ def addDatabase():
             "app": 1,  # Replace with your Kintone app ID # MINE is 1
             "records": []
         }
-
         for index, row in df.iterrows():
-            # print(type(row["Time"]), type(row["Location"]), type(row["Emotion"]))
+            file_key = resize_and_upload_image(row["Path"])
             record = {
                 "image_path": {"value": row["Path"]},
                 "date": {"value": row["Time"]},  
                 "location": {"value": row["Location"]},
                 "emotion": {"value": row["Emotion"]},
+                "image": {  
+                    "value": [
+                        {"fileKey": file_key}
+                    ]
+                }
             }
             data["records"].append(record)
 
