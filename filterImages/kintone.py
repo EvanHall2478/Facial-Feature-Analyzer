@@ -12,9 +12,15 @@ ws = wb.active
 def resize_and_upload_image(file_path):
     # Resize the image
     with Image.open(file_path) as img:
-        img_resized = img.resize((150, 150), Image.LANCZOS)
+        img.thumbnail((250, 250), Image.LANCZOS)
+        width, height = img.size
+        left = (width - 250) / 2
+        top = (height - 250) / 2
+        right = (width + 250) / 2
+        bottom = (height + 250) / 2
+        img_cropped = img.crop((left, top, right, bottom))
         buffer = BytesIO()
-        img_resized.save(buffer, format='JPEG')
+        img_cropped.save(buffer, format='JPEG')
         buffer.seek(0)
     
     # Upload the image
