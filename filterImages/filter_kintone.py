@@ -39,3 +39,6 @@ if __name__ == '__main__':
     print(len(extracted_data))
     print(extracted_data)
 
+    with open('file_paths.txt', 'w') as file:
+        for path in extracted_data:
+            file.write(path + '\n') 
